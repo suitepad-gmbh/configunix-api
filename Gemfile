@@ -68,7 +68,7 @@ end
 
 group :test do
   # Active Model Serializer testing
-  gem 'shoulda-matchers',           '~> 2.8.0'
+  gem 'shoulda-matchers',           '~> 2.8.0',   require: false
   gem 'rspec_active_model_serializers', '~> 0.1.1'
 
   # OS X notifications

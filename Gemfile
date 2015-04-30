@@ -28,6 +28,9 @@ gem 'figaro',                       '~> 1.1.0'
 # Serialization
 gem 'active_model_serializers',     '~> 0.9.3'
 
+# AWS
+gem 'fog',                          '~> 1.29.0'
+
 
 ###############################################
 # Development dependencies

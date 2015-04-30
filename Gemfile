@@ -32,6 +32,8 @@ gem 'active_model_serializers',     '~> 0.9.3'
 gem 'ip_address_validator',         '~> 1.0.1'
 gem 'validates_hostname',           '~> 1.0.5'
 
+# AWS
+gem 'fog',                          '~> 1.29.0'
 
 ###############################################
 # Development dependencies

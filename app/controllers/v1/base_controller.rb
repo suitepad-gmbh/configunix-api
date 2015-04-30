@@ -1,11 +1,30 @@
 module V1
   class BaseController < ApplicationController
+    include Rails::API::HashValidationErrors
+
+    # Callbacks
+    before_action :doorkeeper_authorize!
+
     # Exception handling
     rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
     rescue_from ActiveRecord::RecordInvalid,  with: :record_invalid
     rescue_from ActiveRecord::RecordNotSaved, with: :record_invalid
 
     private
+
+    ##################################
+    # Auth
+    ##################################
+
+    def current_user
+      return nil unless doorkeeper_token
+
+      @current_user ||= User.find doorkeeper_token.resource_owner_id
+    end
+
+    ##################################
+    # Exception handling
+    ##################################
 
     # Override Rails 404 responder, to return a custom JSON message.
     def record_not_found(exception)

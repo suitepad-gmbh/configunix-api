@@ -1,0 +1,17 @@
+postgresql: &postgresql
+  adapter: postgresql
+  host: localhost
+  pool: 5
+  timeout: 5000
+
+development:
+  <<: *postgresql
+  database: configunix_development
+
+test:
+  <<: *postgresql
+  database: configunix_test
+
+production:
+  <<: *postgresql
+  database: configunix_production

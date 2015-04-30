@@ -28,6 +28,10 @@ gem 'figaro',                       '~> 1.1.0'
 # Serialization
 gem 'active_model_serializers',     '~> 0.9.3'
 
+# Validators
+gem 'ip_address_validator',         '~> 1.0.1'
+gem 'validates_hostname',           '~> 1.0.5'
+
 
 ###############################################
 # Development dependencies

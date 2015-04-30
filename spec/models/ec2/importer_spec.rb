@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Host, type: :model do
+RSpec.describe Ec2::Importer, type: :model do
   before :each do
     # set required env
     ENV['aws_access_key_id']     = 'KEY ID'
@@ -9,6 +9,9 @@ RSpec.describe Host, type: :model do
 
     # mock Fog requests
     Fog.mock!
+
+    # Reset class instance variables
+    Ec2::Importer.instance_variable_set '@_connection', nil
   end
 
   describe '#connection' do

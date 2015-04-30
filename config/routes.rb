@@ -5,6 +5,6 @@ Rails.application.routes.draw do
               path: { value: 'v1' },
               defaults: { format: :json } do
 
-    resources :hosts, except: %i(new edit)
+    resources :hosts, except: %i(new edit create destroy)
   end
 end

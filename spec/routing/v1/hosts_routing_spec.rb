@@ -30,11 +30,8 @@ RSpec.describe V1::HostsController, type: :routing do
       expect(get: '/v1/hosts/1/edit').not_to be_routable
     end
 
-    it 'routes to #create' do
-      expect(post: '/v1/hosts').to route_to(
-        'v1/hosts#create',
-        format: :json
-      )
+    it 'does not route to #create' do
+      expect(post: '/v1/hosts').to_not be_routable
     end
 
     it 'routes to #update' do
@@ -45,12 +42,8 @@ RSpec.describe V1::HostsController, type: :routing do
       )
     end
 
-    it 'routes to #destroy' do
-      expect(delete: '/v1/hosts/1').to route_to(
-        'v1/hosts#destroy',
-        id: '1',
-        format: :json
-      )
+    it 'does not route to #destroy' do
+      expect(delete: '/v1/hosts/1').to_not be_routable
     end
   end
 

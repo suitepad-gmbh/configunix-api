@@ -38,4 +38,16 @@ Rails.application.configure do
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
+
+  # Configure Rack CORS
+  config.middleware.insert_before 0, 'Rack::Cors', logger: (-> { Rails.logger }) do
+    allow do
+      origins '*'
+      resource(
+        '*',
+        headers: :any,
+        methods: %i(get post patch put delete options)
+      )
+    end
+  end
 end

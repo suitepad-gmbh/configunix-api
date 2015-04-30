@@ -10,5 +10,6 @@ RSpec.describe V1::HostSerializer, type: :serializer do
   it { should respond_to(:public_ip_address) }
   it { should respond_to(:private_ip_address) }
   it { should respond_to(:puppet_config) }
+  it { should respond_to(:created_at) }
 
 end

@@ -1,0 +1,25 @@
+#!/usr/bin/env ruby
+require 'rubygems' # ruby1.9 doesn't "require" it though
+require 'thor'
+
+class Enc < Thor
+  desc 'node_definition HOSTNAME', 'Request node definition for hostname'
+  def node_definition(hostname)
+    require './config/environment'
+
+    table = Host.arel_table
+    host = Host.where(
+      table[:dns_name].eq(hostname).or(table[:private_dns_name].eq(hostname))
+    ).first
+
+    unless host.present?
+      puts "Could not find definition for host #{hostname}"
+      exit false
+    end
+
+    puts host.puppet_config
+  end
+end
+
+exit false unless ARGV && ARGV.length >= 1
+Enc.start [:node_definition, ARGV[0]]

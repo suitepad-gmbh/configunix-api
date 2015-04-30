@@ -8,7 +8,8 @@ gem 'rails-api',                    '~> 0.4.0'
 gem 'pg',                           '~> 0.18.1'
 
 # Authentication
-gem 'doorkeeper',                   '~> 2.2.0'
+gem 'doorkeeper',                   github: 'doorkeeper-gem/doorkeeper',
+                                    ref: 'e02b6196'
 
 # CORS
 gem 'rack-cors',                    '~> 0.4.0'
@@ -66,6 +67,12 @@ group :development, :test do
   # Test factories and dummy data
   gem 'factory_girl_rails',         '~> 4.5.0'
   gem 'ffaker',                     '~> 2.0.0'
+
+  # Deployment
+  gem 'capistrano',                 '~> 3.4.0'
+  gem 'capistrano-bundler',         '~> 1.1.4'
+  gem 'capistrano-passenger',       '~> 0.0.5'
+  gem 'capistrano-rails',           '~> 1.1.3'
 end
 
 ###############################################

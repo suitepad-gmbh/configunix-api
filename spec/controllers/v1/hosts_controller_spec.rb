@@ -1,7 +1,14 @@
 require 'rails_helper'
 
 RSpec.describe V1::HostsController, type: :controller do
-  let(:host) { FactoryGirl.create :host }
+  let(:user)  { FactoryGirl.create :user }
+  let(:host)  { FactoryGirl.create :host }
+  let(:token) { double :acceptable? => true }
+
+  before do
+    allow(controller).to receive(:doorkeeper_token) {token}
+    allow(controller).to receive(:current_user) {user}
+  end
 
   before :each do
     # set required env

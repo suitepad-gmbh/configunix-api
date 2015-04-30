@@ -61,6 +61,12 @@ RSpec.describe Host, type: :model do
 
     subject.puppet_config = "Not YAML"
     expect(subject).not_to be_valid
+
+    subject.puppet_config = ''
+    expect(subject).to be_valid
+
+    subject.puppet_config = nil
+    expect(subject).to be_valid
   end
 
 end

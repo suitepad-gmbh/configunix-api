@@ -6,5 +6,6 @@ Rails.application.routes.draw do
               defaults: { format: :json } do
 
     resources :hosts, except: %i(new edit create destroy)
+    resources :puppet_classes, except: %i(new edit)
   end
 end

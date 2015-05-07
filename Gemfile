@@ -98,6 +98,5 @@ end
 
 group :production do
   # Server
-  # gem 'puma',                       '~> 2.11.2'
-  gem 'passenger',                  '~> 4.0.37'
+  gem 'puma',                       '~> 2.11.2'
 end

@@ -20,10 +20,10 @@ RSpec.describe Host, type: :model do
   ##################################
 
   it { should validate_presence_of :instance_id }
-  it { should validate_presence_of :dns_name }
+  it { should_not validate_presence_of :dns_name }
   it { should validate_presence_of :private_dns_name }
   it { should validate_presence_of :private_ip_address }
-  it { should validate_presence_of :public_ip_address }
+  it { should_not validate_presence_of :public_ip_address }
   it { should validate_uniqueness_of :instance_id }
 
   it 'validates dns_name to be a valid hostname' do

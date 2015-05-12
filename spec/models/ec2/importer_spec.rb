@@ -45,16 +45,18 @@ RSpec.describe Ec2::Importer, type: :model do
                                               created_at: 2.hours.ago,
                                               id: 'instance-id'
       )
-      OpenStruct.new attributes
+      OpenStruct.new attributes.merge(
+        state: 'running'
+      )
     }
 
     it 'requests servers' do
-      expect(Ec2::Importer).to receive(:servers).and_return([], [])
+      expect(Ec2::Importer).to receive(:servers).and_return([])
       Ec2::Importer.run
     end
 
     it 'creates new hosts in the database' do
-      expect(Ec2::Importer).to receive(:servers).and_return [remote_host], [remote_host]
+      expect(Ec2::Importer).to receive(:servers).and_return [remote_host]
       expect {
         Ec2::Importer.run
       }.to change(Host, :count).by 1
@@ -62,7 +64,7 @@ RSpec.describe Ec2::Importer, type: :model do
 
     it 'is not creating a host twice' do
       remote_host.id = host.instance_id
-      expect(Ec2::Importer).to receive(:servers).and_return [remote_host], [remote_host]
+      expect(Ec2::Importer).to receive(:servers).and_return [remote_host]
       expect {
         Ec2::Importer.run
       }.not_to change(Host, :count)
@@ -71,21 +73,42 @@ RSpec.describe Ec2::Importer, type: :model do
     it 'updates the existing record' do
       remote_host.id = host.instance_id
       remote_host.dns_name = 'example.com'
-      expect(Ec2::Importer).to receive(:servers).and_return [remote_host], [remote_host]
+      expect(Ec2::Importer).to receive(:servers).and_return [remote_host]
       expect {
         Ec2::Importer.run
       }.to change { host.reload.dns_name }.to 'example.com'
     end
 
-    it 'deletes terminated instances' do
-      deleted_host = FactoryGirl.create :host
-      remote_host = FactoryGirl.create :host
-      expect(Ec2::Importer).to receive(:servers).and_return [remote_host], [remote_host]
+    it 'deletes instances not listed' do
+      deleted_host = OpenStruct.new FactoryGirl.create(:host).attributes.merge(
+        state: 'terminated'
+      )
+      remote_host = OpenStruct.new FactoryGirl.create(:host).attributes.merge(
+        state: 'running'
+      )
+      deleted_host.id = deleted_host.instance_id
+      remote_host.id  = remote_host.instance_id
+      expect(Ec2::Importer).to receive(:servers).and_return [remote_host]
       Ec2::Importer.run
 
       expect {
         Host.find deleted_host.id
       }.to raise_exception ActiveRecord::RecordNotFound
+    end
+
+    it 'deletes terminated instances' do
+      deleted_host = OpenStruct.new FactoryGirl.create(:host).attributes.merge(
+        state: 'terminated'
+      )
+      remote_host = OpenStruct.new FactoryGirl.create(:host).attributes.merge(
+        state: 'running'
+      )
+      deleted_host.id = deleted_host.instance_id
+      remote_host.id  = remote_host.instance_id
+      expect(Ec2::Importer).to receive(:servers).and_return [remote_host, deleted_host]
+      expect {
+        Ec2::Importer.run
+      }.to change(Host, :count).by(-1)
     end
   end
 end

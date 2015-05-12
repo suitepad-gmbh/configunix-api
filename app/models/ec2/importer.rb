@@ -11,11 +11,10 @@ module Ec2
   class Importer
     class <<self
       def run
-        servers.each do |server|
-          create_or_update_host server
-        end
-
-        delete_host_but_these servers.map(&:id)
+        list = servers
+        list.each { |server| create_or_update_host server }
+        delete_terminated_hosts list
+        delete_host_but_these list.map(&:id)
       end
 
       private
@@ -36,8 +35,7 @@ module Ec2
       end
 
       def create_or_update_host(server)
-        host = Host.where(instance_id: server.id).first
-        host ||= Host.new(instance_id: server.id)
+        return unless host = find_or_create_host(server)
         host.assign_attributes(
           dns_name:           server.dns_name,
           private_dns_name:   server.private_dns_name,
@@ -48,9 +46,24 @@ module Ec2
         host.save!
       end
 
+      def find_or_create_host(server)
+        return false if terminated?(server)
+        Host.where(instance_id: server.id).first ||
+          Host.new(instance_id: server.id)
+      end
+
+      def delete_terminated_hosts(servers)
+        servers = servers.select { |server| terminated?(server) }
+        Host.where(instance_id: servers.map(&:id)).destroy_all
+      end
+
       def delete_host_but_these(ids)
         table = Host.arel_table
         Host.where(table[:instance_id].not_in ids).destroy_all
+      end
+
+      def terminated?(server)
+        server.state == 'terminated'
       end
     end
   end

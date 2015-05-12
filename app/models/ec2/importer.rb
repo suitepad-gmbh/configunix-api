@@ -37,6 +37,7 @@ module Ec2
       def create_or_update_host(server)
         return unless host = find_or_create_host(server)
         host.assign_attributes(
+          name:               (server.tags || {})['Name'],
           dns_name:           server.dns_name,
           private_dns_name:   server.private_dns_name,
           private_ip_address: server.private_ip_address,

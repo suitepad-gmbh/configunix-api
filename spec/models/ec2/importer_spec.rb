@@ -46,7 +46,10 @@ RSpec.describe Ec2::Importer, type: :model do
                                               id: 'instance-id'
       )
       OpenStruct.new attributes.merge(
-        state: 'running'
+        state: 'running',
+        tags: {
+          Name: attributes[:name]
+        }
       )
     }
 
@@ -77,6 +80,15 @@ RSpec.describe Ec2::Importer, type: :model do
       expect {
         Ec2::Importer.run
       }.to change { host.reload.dns_name }.to 'example.com'
+    end
+
+    it 'updates the name of a record' do
+      remote_host.id = host.instance_id
+      remote_host.tags['Name'] = 'New name'
+      expect(Ec2::Importer).to receive(:servers).and_return [remote_host]
+      expect {
+        Ec2::Importer.run
+      }.to change { host.reload.name }.to 'New name'
     end
 
     it 'deletes instances not listed' do

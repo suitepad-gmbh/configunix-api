@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150430100800) do
+ActiveRecord::Schema.define(version: 20150512065231) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,6 +25,7 @@ ActiveRecord::Schema.define(version: 20150430100800) do
     t.datetime "created_at",         null: false
     t.datetime "updated_at",         null: false
     t.string   "instance_id"
+    t.string   "name"
   end
 
   add_index "hosts", ["instance_id"], name: "index_hosts_on_instance_id", unique: true, using: :btree
@@ -68,6 +69,12 @@ ActiveRecord::Schema.define(version: 20150430100800) do
   end
 
   add_index "oauth_applications", ["uid"], name: "index_oauth_applications_on_uid", unique: true, using: :btree
+
+  create_table "puppet_classes", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "users", force: :cascade do |t|
     t.string   "email"

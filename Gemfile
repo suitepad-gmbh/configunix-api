@@ -67,11 +67,6 @@ group :development, :test do
   # Test factories and dummy data
   gem 'factory_girl_rails',         '~> 4.5.0'
   gem 'ffaker',                     '~> 2.0.0'
-
-  # Deployment
-  gem 'capistrano',                 '~> 3.4.0'
-  gem 'capistrano-bundler',         '~> 1.1.4'
-  gem 'capistrano-rails',           '~> 1.1.3'
 end
 
 ###############################################

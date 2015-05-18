@@ -21,9 +21,10 @@ module V1
 
       # Execute post update script, e.g.
       # "cd /etc/puppet/environments/production; librarian-puppet install"
-      return unless post_update_script.present?
+      return unless (script = ENV['puppet_repository_post_update']).present?
       Bundler.with_clean_env do
-        system "bash -c #{Shellwords.escape post_update_script}"
+        Rails.logger.info "Running post update script: #{script}"
+        system "bash -c #{Shellwords.escape script}"
       end
     end
 
@@ -31,10 +32,6 @@ module V1
 
     def repo_path
       ENV['puppet_repository_path']
-    end
-
-    def post_update_script
-      ENV['puppet_repository_post_update']
     end
   end
 end

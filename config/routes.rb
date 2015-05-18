@@ -6,5 +6,7 @@ Rails.application.routes.draw do
               defaults: { format: :json } do
 
     resources :hosts, except: [:new, :edit, :create, :destroy]
+
+    post 'webhooks/:action', controller: :webhooks#, action: :github
   end
 end

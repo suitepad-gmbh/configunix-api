@@ -36,6 +36,9 @@ gem 'validates_hostname',           '~> 1.0.5'
 # AWS
 gem 'fog',                          '~> 1.29.0'
 
+# Git management
+gem 'git',                          '~> 1.2.9'
+
 ###############################################
 # Development dependencies
 ###############################################

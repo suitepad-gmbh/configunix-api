@@ -1,3 +1,5 @@
+require 'shellwords'
+
 module V1
   class WebhooksController < BaseController
     # No authorization necessary for webhook

@@ -16,12 +16,23 @@ module V1
       repo = Git.open repo_path
       repo.reset_hard 'HEAD'
       repo.pull
+
+      # Execute post update script, e.g.
+      # "cd /etc/puppet/environments/production; librarian-puppet install"
+      return unless post_update_script.present?
+      Bundler.with_clean_env do
+        system "bash -c #{Shellwords.escape post_update_script}"
+      end
     end
 
     private
 
     def repo_path
-      @repo_path ||= ENV['puppet_repository_path']
+      ENV['puppet_repository_path']
+    end
+
+    def post_update_script
+      ENV['puppet_repository_post_update']
     end
   end
 end
